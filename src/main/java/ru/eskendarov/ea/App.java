@@ -1,6 +1,5 @@
 package ru.eskendarov.ea;
 
-
 /**
  * Домашнее задание
  * 1. Необходимо написать два метода, которые делают следующее:
@@ -40,11 +39,16 @@ package ru.eskendarov.ea;
  * склейки.
  **/
 
-
 public class App {
     public static void main(String[] args) {
         Multithreading multithreading = new Multithreading();
-        new Thread(() -> multithreading.method1()).start();
-        new Thread(() -> multithreading.method2()).start();
+        new Thread(() -> multithreading.simpleСalculationArray()).start();
+        new Thread(() -> {
+            try {
+                multithreading.complexСalculationArray();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
