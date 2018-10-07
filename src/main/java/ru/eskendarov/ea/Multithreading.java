@@ -4,25 +4,22 @@ public class Multithreading extends Thread {
     static final int size = 10000000;
     static final int h = size / 2;
 
-
-    public synchronized void method1() {
+    public synchronized void simpleСalculationArray() {
 
         float[] arr = new float[size];
-
         for (int i = 0; i < size; i++) {
             arr[i] = 1.0f;
         }
         long a = System.currentTimeMillis();
         calcArray(arr);
-        System.out.println("Method 1 execution time: " + (System.currentTimeMillis() - a));
+        System.out.println("Simple calculation array execution time: " + (System.currentTimeMillis() - a));
     }
 
+    public synchronized void complexСalculationArray() throws InterruptedException {
 
-    public synchronized void method2() {
-
-        float[] arr = new float[size];
-        float[] a1 = new float[h];
-        float[] a2 = new float[h];
+        final float[] arr = new float[size];
+        final float[] a1 = new float[h];
+        final float[] a2 = new float[h];
 
         for (int i = 0; i < size; i++) {
             arr[i] = 1.0f;
@@ -33,30 +30,35 @@ public class Multithreading extends Thread {
         System.arraycopy(arr, 0, a1, 0, h);
         System.arraycopy(arr, h, a2, 0, h);
 
-        new Thread(() -> methodMiniArr1(a1)).start();
-        new Thread(() -> methodMiniArr2(a2)).start();
+//      создадим два параллельных потока для разделенных массивов
+        Thread multithreading1 = new Thread(() -> methodMiniArr1(a1));
+        Thread multithreading2 = new Thread(() -> methodMiniArr2(a2));
+        multithreading1.start();
+        multithreading2.start();
+
+//      подождем пока высчитывается медленный поток, для высчитывания времени родительского потока
+        multithreading1.join();
+        multithreading2.join();
 
 //      обратная склейка массива arr из a1 и a2
         System.arraycopy(a1, 0, arr, 0, h);
         System.arraycopy(a2, 0, arr, h, h);
-
-        System.out.println("Method 2 execution time: " + (System.currentTimeMillis() - a));
+        System.out.println("Complex calculation array execution time in total: " + (System.currentTimeMillis() - a));
     }
 
-    public void methodMiniArr1(float[] arr) {
+    private void methodMiniArr1(float[] arr) {
         long a = System.currentTimeMillis();
         float[] a1 = calcArray(arr);
-        System.out.println("methodMiniArr 1 execution time: " + (System.currentTimeMillis() - a));
-
+        System.out.println("Time by first complex: " + (System.currentTimeMillis() - a));
     }
 
-    public void methodMiniArr2(float[] arr) {
+    private void methodMiniArr2(float[] arr) {
         long a = System.currentTimeMillis();
         float[] a2 = calcArray(arr);
-        System.out.println("methodMiniArr 2 execution time: " + (System.currentTimeMillis() - a));
+        System.out.println("Time by secondary complex: " + (System.currentTimeMillis() - a));
     }
 
-    public float[] calcArray(float[] arr) {
+    private float[] calcArray(float[] arr) {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
         }
