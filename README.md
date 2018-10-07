@@ -1,2 +1,2 @@
-# JavaCore.Lesson5.Eskendarov
-multithreading
+# multithreading
+Java Multithreading
