@@ -43,12 +43,6 @@ public class App {
     public static void main(String[] args) {
         Multithreading multithreading = new Multithreading();
         new Thread(() -> multithreading.simpleСalculationArray()).start();
-        new Thread(() -> {
-            try {
-                multithreading.complexСalculationArray();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        new Thread(() -> multithreading.complexСalculationArray()).start();
     }
 }
