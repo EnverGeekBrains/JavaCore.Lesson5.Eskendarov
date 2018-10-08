@@ -31,8 +31,8 @@ public class Multithreading extends Thread {
         System.arraycopy(arr, h, a2, 0, h);
 
 //      создадим два параллельных потока для разделенных массивов
-        Thread multithreading1 = new Thread(() -> methodMiniArr1(a1));
-        Thread multithreading2 = new Thread(() -> methodMiniArr2(a2));
+        Thread multithreading1 = new Thread(() -> firstComplexCalculate(a1));
+        Thread multithreading2 = new Thread(() -> secondaryComplexCalculate(a2));
         multithreading1.start();
         multithreading2.start();
 
@@ -46,13 +46,13 @@ public class Multithreading extends Thread {
         System.out.println("Complex calculation array execution time in total: " + (System.currentTimeMillis() - a));
     }
 
-    private void methodMiniArr1(float[] arr) {
+    private void firstComplexCalculate(float[] arr) {
         long a = System.currentTimeMillis();
         float[] a1 = calcArray(arr);
         System.out.println("Time by first complex: " + (System.currentTimeMillis() - a));
     }
 
-    private void methodMiniArr2(float[] arr) {
+    private void secondaryComplexCalculate(float[] arr) {
         long a = System.currentTimeMillis();
         float[] a2 = calcArray(arr);
         System.out.println("Time by secondary complex: " + (System.currentTimeMillis() - a));
