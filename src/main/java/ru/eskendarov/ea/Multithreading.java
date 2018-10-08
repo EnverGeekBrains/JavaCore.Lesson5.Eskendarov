@@ -1,5 +1,7 @@
 package ru.eskendarov.ea;
 
+import lombok.SneakyThrows;
+
 public class Multithreading extends Thread {
     static final int size = 10000000;
     static final int h = size / 2;
@@ -15,7 +17,8 @@ public class Multithreading extends Thread {
         System.out.println("Simple calculation array execution time: " + (System.currentTimeMillis() - a));
     }
 
-    public synchronized void complexСalculationArray() throws InterruptedException {
+    @SneakyThrows
+    public synchronized void complexСalculationArray() {
 
         final float[] arr = new float[size];
         final float[] a1 = new float[h];
